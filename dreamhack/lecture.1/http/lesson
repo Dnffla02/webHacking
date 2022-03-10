@@ -1,0 +1,49 @@
+
+
+
+
+
+HTTP(Hyper Text Treansfer Protocol)
+  서버와 클라이언트의 데이터 교환을 요청(Request)와 응답(Response) 형식으로 정의한 프로토콜
+  웹 서버는 HTTP서버를 HTTP서비스 포트에 대기시킴
+  일반적으로 TCP/80 or TCP/8080을 사용함
+  
+  네트워크 포트(Network Port)
+    클라이언트가 서버의 포트에 접근해 데이터를 내려놓고, 서버가 클라이언트에 보낼 데이터를 실어 보냄
+  서비스 포트(Service Port)
+    포트를 데이터로 교환하는 방식은 전송 계층(Transport Layer)의 프로토콜
+    대표적으로는 TCP와 UDP가 있음
+    TCP로 데이터 전송시 UDP클라이언트에 접근시 데이터 교환 X, 반대도 X
+    0~1023번까지의 포트는 잘 알려진(well-known port) 또는 특권 포트(Privileged prot)라고 함
+    대표적으로 22번포트 SSH, 80 HTTP, 443 HTTPS 할당
+HTTP 메시지
+  HTTP 헤드
+    CRLF로 구분되며, 첫 줄(Start-line), 헤더(Header)로 나뉨, 헤드의 끝은 CRLF 한 줄로 나타냄
+    하나의 HTTP 메시지에는 0개 이상의 헤더가 있을 수 있음
+  HTTP 바디
+    HTTP바디는 헤드의 끝 CRLF 뒤 모든 줄을 의미함
+    클라이언트/서버에 전송하려는 데이터가 바디에 담김
+HTTP 요청
+  HTTP요청의 동작, 실현, 권한을 확인 후 처리
+  시작줄
+    메소드(Method), 요청(URL), HTTP버전으로 구성됨
+  헤더와 바디
+    생략
+HTTP 응답
+  시작줄
+    1xx: 처리중
+    2xx: 요청이 제대로 처리됨
+    3xx: 요청 처리를 위해서 추가 동작이 필요함
+    4xx: 클라이언트가 잘못된 요청을 보내서 실패함
+    5xx: 서버에서 에러가 발생함
+
+
+
+
+
+
+
+
+
+
+
