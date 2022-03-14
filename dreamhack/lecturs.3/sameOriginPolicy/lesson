@@ -1,0 +1,106 @@
+
+
+
+
+
+Background:Cookie&Session 코스에서 쿠키에는 인증 상태를 나타내는 민감한 정보과 보관되며 브라우저 내부에 저장됨
+브라우저가 웹 서비스에 접속시, 브라우저는 자동으로 쿠키를 헤더에 포함시켜 요청을 보냄
+이로 인해 일정시간 로그인을 하지 않아도 서비스를 이용할 수 있음
+but. 페이지에 악의적으로 접속시 자바스크립트를 이용해 이용자의 SNS를 사용 가능
+이를 방지하기 위한 기술
+  동일 출처 정책
+  Same Origin Policy(SOP) 보안 매커니즘 탄생
+  클라리언트 사이드 공격은 SOP를 우회하기 위한 방법이기도 함
+  
+Same Origin Policy
+  브라우저는 해당 웹 서비스에서 사용하는 인증정보인 쿠키를 HTTP요청에 포함시켜 전달함
+    이 특징은 웹 사이트 접속에만이 아닌, 간접적 타 사이트에 접근할때도 쿠키를 함께 전송함
+    이 특징은 악의적 페이지가 클라이언트의 권한을 이용해 사이트 HTTP요청 및 코드 실행 가능함
+      정보 유출과 보안 위험이 생김
+      그러므로, 자신의 쿠키를 타 클라이언트에 보이지 않도록 해야함
+      -> 동일 출처 정책(Same Origin Policy, SOP)
+  구분법
+    프로토콜(Protocol, Scheme), 포트(Port), 호스트(Host)로 구성됨
+      이것들이 모두 일치해야 동일한 오리진이라고 함
+    ex
+      https://same-origin.com/frame.html        Same Origin   Path만 다름
+      http://same-origin.com/frame.html         Cross Origin  Scheme이 다름
+      https://cross.same-origin.com/frame.html  Cross Origin  Host가 다름
+  실습
+    SOP는 Same Origin일 때만 정보를 읽을 수 있게 해줌
+    예시코드(Same Origin)
+      sameNewWindow = window.open('https://dreamhack.io/lecture');
+      console.log(sameNewWindow.location.href);
+      결과: https://dreamhack.io/lecture
+    예시코드(Cross Origin)
+      crossNewWindow = window.open('https://theori.io');
+      console.log(crossNewWindow.location.href);
+      결과: Origin 오류 발생
+    예시 코드(Cross Origin 데이터 읽기/쓰기)
+      crossNewWindow = window.open('https://theori.io');
+      crossNewWindow.location.href = "https://dreamhack.io";
+    window.open: 창을 띄우는 함수
+    object.location.href: 객체가 가리키는 URL 주소를 읽어오는 코드 
+  데모
+    코드 동작 설명
+      1. iframe: 현재 웹 페이지 안에 또 하나의 웹페이지를 삽입하는 HTML 테그로, 
+        src요소를 설정함으로써 삽입 웹 페이지 주소 결정
+      2. 10번째 줄의 onload는 이벤트 헨들러로, 
+        해당 객체가 성공적 로드시 동작함
+      3. 로드가 완료시, iframe내에 삽입된 주소에 secret-element객체의 값인 
+        treasure를 읽어와 콘솔에 출력함
+    코드
+      <!-- iframe 객체 생성 -->
+      <iframe src="" id="my-frame"></iframe>
+      <!-- Javascript 시작 -->
+      <script>
+      /* 2번째 줄의 iframe 객체를 myFrame 변수에 가져옵니다. */
+      let myFrame = document.getElementById('my-frame')
+      /* iframe 객체에 주소가 로드되는 경우 아래와 같은 코드를 실행합니다. */
+      myFrame.onload = () => {
+          /* try ... catch 는 에러를 처리하는 로직 입니다. */
+          try {
+              /* 로드가 완료되면, secret-element 객체의 내용을 콘솔에 출력합니다. */
+              let secretValue = myFrame.contentWindow.document.getElementById('secret-element').innerText;
+              console.log({ secretValue });
+          } catch(error) {
+              /* 오류 발생시 콘솔에 오류 로그를 출력합니다. */
+              console.log({ error });
+          }
+      }
+      /* iframe객체에 Same Origin, Cross Origin 주소를 로드하는 함수 입니다. */
+      const loadSameOrigin = () => { myFrame.src = 'https://same-origin.com/frame.html'; }
+      const loadCrossOrigin = () => { myFrame.src = 'https://cross-origin.com/frame.html'; }
+      </script>
+      <!--
+      버튼 2개 생성 (Same Origin 버튼, Cross Origin 버튼)
+      -->
+      <button onclick=loadSameOrigin()>Same Origin</button><br>
+      <button onclick=loadCrossOrigin()>Cross Origin</button>
+      <!--
+      frame.html의 코드가 아래와 같습니다.
+      secret-element라는 id를 가진 div 객체 안에 treasure라고 하는 비밀 값을 넣어두었습니다.
+      -->
+      <div id="secret-element">treasure</div>
+Cross Origin Resource Sharing(CORS)
+  Same Origin Policy 제한 완화 
+    브라우저가 SOP에 구애받지않고 외부 출처에 대한 접근을 허용해주는 경우도 있음
+    ex. <img>, <style>, <script> 등
+  교차 출처 리소스 공유
+    CROS와 관련된 HTTP 헤더를 추가해 전송하는 방법
+    수신측에서 헤더를 구분해 정해진 규칙에 맞게 데이터를 가져갈 수 있도록 설정
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
